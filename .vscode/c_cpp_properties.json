@@ -1,0 +1,41 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/lib/application/include",
+                "${workspaceFolder}/lib/imgui",
+                "${workspaceFolder}/lib/imgui/misc/cpp",
+                "${workspaceFolder}/lib/implot",
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang++",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "compileCommands": "${workspaceFolder}/build/Release/compile_commands.json",
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/lib/application/include",
+                "${workspaceFolder}/lib/imgui",
+                "${workspaceFolder}/lib/imgui/misc/cpp",
+                "${workspaceFolder}/lib/implot",
+                "~/.conan/data/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "_USE_MATH_DEFINES",
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "compilerPath": "cl.exe",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "msvc-x64",
+        }
+    ],
+    "version": 4
+}

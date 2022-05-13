@@ -1,0 +1,185 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+        // ║                                        CLEAN Tasks                                       ║
+        // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+        { // Remove Build Files
+            "label": "Clean: Remove Build Files",
+            "type": "shell",
+            "group": "build",
+            "linux": {
+                "command": "rm",
+                "args": [
+                    "-rf",
+                    "build",
+                    "bin",
+                ],
+            },
+            "windows": {
+                "command": "Remove-Item",
+                "args": [
+                    "-Recurse",
+                    "bin,",
+                    "build",
+                ]
+            },
+            "presentation": {
+                "reveal": "never",
+                "echo": false,
+                "showReuseMessage": false,
+            },
+            "problemMatcher": [],
+        },
+        // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+        // ║                                        CMAKE Tasks                                       ║
+        // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+        { // Cmake
+            "label": "Cmake",
+            "type": "shell",
+            "group": "build",
+            "command": "cmake",
+            "args": [
+                "-Bbuild/Release",
+                "-S.",
+                "-DCMAKE_BUILD_TYPE=Release",
+            ],
+            "linux": {
+                "options": {
+                    "env": {
+                        "CC": "/usr/bin/clang",
+                        "CXX": "/usr/bin/clang++",
+                    },
+                },
+            },
+            "windows": {
+                "options": {
+                    "env": {
+                        "VSLANG": "1033",
+                    }
+                },
+            },
+            "presentation": {
+                "clear": true,
+            },
+            "problemMatcher": [],
+        },
+        { // Cmake
+            "label": "Cmake Debug",
+            "type": "shell",
+            "group": "build",
+            "command": "cmake",
+            "args": [
+                "-Bbuild/Debug",
+                "-S.",
+                "-DCMAKE_BUILD_TYPE=Debug",
+            ],
+            "linux": {
+                "options": {
+                    "env": {
+                        "CC": "/usr/bin/clang",
+                        "CXX": "/usr/bin/clang++",
+                    },
+                },
+            },
+            "windows": {
+                "options": {
+                    "env": {
+                        "VSLANG": "1033",
+                    }
+                },
+            },
+            "presentation": {
+                "clear": true,
+            },
+            "problemMatcher": [],
+        },
+        // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+        // ║                                       Build Tasks                                        ║
+        // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+        { // Build project
+            "label": "Build",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "cmake",
+            "linux": {
+                "args": [
+                    "--build",
+                    "build/Release",
+                    "--",
+                    "-j8",
+                ],
+            },
+            "windows": {
+                "args": [
+                    "--build",
+                    "build/Release",
+                    "--",
+                    "-maxCpuCount",
+                ],
+                "options": {
+                    "env": {
+                        "VSLANG": "1033",
+                    }
+                },
+            },
+            "dependsOn": [
+                "Cmake",
+            ],
+            "problemMatcher": [],
+        },
+        { // Build project
+            "label": "Build Debug",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+            },
+            "command": "cmake",
+            "linux": {
+                "args": [
+                    "--build",
+                    "build/Debug",
+                    "--",
+                    "-j8",
+                ],
+            },
+            "windows": {
+                "args": [
+                    "--build",
+                    "build/Debug",
+                    "--",
+                    "-maxCpuCount",
+                ],
+                "options": {
+                    "env": {
+                        "VSLANG": "1033",
+                    }
+                },
+            },
+            "dependsOn": [
+                "Cmake Debug",
+            ],
+            "problemMatcher": [],
+        },
+        // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+        // ║                                        Run Tasks                                         ║
+        // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+        { // Build & run project
+            "label": "Build & run",
+            "type": "shell",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "command": "./bin/oop-robot-navigation-challenge",
+            "args": [],
+            "dependsOn": [
+                "Build",
+            ],
+            "problemMatcher": [],
+        },
+    ]
+}

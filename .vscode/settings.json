@@ -1,0 +1,24 @@
+{
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "C_Cpp.autoAddFileAssociations": false, // Otherwise the "files.associations" list will be filled everytime opening a file without extension (e.g. <iostream>)
+    "C_Cpp.default.cppStandard": "c++17",
+    "search.exclude": {
+        ".vscode": true,
+        "bin": true,
+        "build": true,
+        "cmake": true,
+    },
+    "clang-tidy.buildPath": "build",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        // "lib": true,
+        // "src/internal": true,
+        "ImGui.ini": true,
+    },
+}

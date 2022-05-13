@@ -1,0 +1,11 @@
+# Ignore the build dir
+build
+
+# Ignore any executables
+bin
+
+# Ignore root level compile_commands
+/compile_commands.json
+
+# ImGui
+ImGui.ini
