@@ -80,7 +80,6 @@ ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
   - MSVC Buildtools
   - Windows SDK
   - C++-CMake-Tools for Windows
-  - C++-Clang-Tools for Windows
 - Install [Conan](https://conan.io/downloads.html)
 
 ## Dependencies
@@ -90,8 +89,6 @@ ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
     * C++ compiler ([clang](https://clang.llvm.org/) or [gcc](https://gcc.gnu.org/) is recommended, but others work as well) for compiling the project
 * Optional:
     * [Conan](https://conan.io) A distributed, open source, C/C++ package manager
-    * [clang-format](https://clang.llvm.org/docs/ClangFormat.html) Code formatting Tool
-    * [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) Clang-based C++ "linter" tool
 * Libraries (Install yourself and change cmake link targets or let them automatically be installed by Conan):
     * [spdlog](https://github.com/gabime/spdlog) Fast C++ logging library [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
     * [fmt](https://github.com/fmtlib/fmt) A modern formatting library [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)

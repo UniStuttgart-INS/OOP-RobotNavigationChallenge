@@ -375,7 +375,7 @@ void GameState::Update(float deltaTime)
             {
                 for (ResourceType resType = 0; resType < ResourceType_COUNT; ++resType) // Not enough resources to build new unit
                 {
-                    if (player->m_resources.at(resType) < glob::units::ROBOT_COSTS.at(resType))
+                    if (player->m_resources.at(resType) < static_cast<size_t>(glob::units::ROBOT_COSTS.at(resType)))
                     {
                         player->m_isAlive = false;
                         break;
@@ -655,7 +655,14 @@ void GameState::DrawGameStats(float availableWidth)
             ImGui::TableNextColumn();
             ImGui::TextUnformatted("Heading");
             ImGui::TableNextColumn();
-            ImGui::Text("%.1f°", unit->m_heading * 180.0F / static_cast<float>(M_PI));
+            if (glob::game::ENABLE_HEADING_PRECISION)
+            {
+                ImGui::Text("%.1f° ± %.1f°", unit->m_heading * 180.0F / static_cast<float>(M_PI), unit->m_headingBias * 180.0F / static_cast<float>(M_PI));
+            }
+            else
+            {
+                ImGui::Text("%.1f°", unit->m_heading * 180.0F / static_cast<float>(M_PI));
+            }
 
             if (!isHQ && unit->m_parent->m_gid)
             {

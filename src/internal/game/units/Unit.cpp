@@ -39,6 +39,8 @@ Unit::Unit(PlayerBase* parent, size_t gid, Eigen::Vector2f position, float headi
       m_parent(parent),
       m_pos(std::move(position)),
       m_heading(heading),
+      m_headingBias(RandomNumberGenerator::userRngGenerator().uniform_real_distribution<float>(-glob::game::ERROR_HEADING_PRECISION / 2.0F,
+                                                                                               glob::game::ERROR_HEADING_PRECISION / 2.0F)),
       m_speed(glob::units::ATTR_BASE_SPEED + RandomNumberGenerator::userRngGenerator().normal_distribution<float>(-0.1F, 0.1F)),
       m_maxHealth(glob::units::ATTR_BASE_HEALTH + RandomNumberGenerator::userRngGenerator().normal_distribution<float>(-1.0F, 1.0F)),
       m_scanRange(glob::units::ATTR_BASE_SCAN_RANGE + RandomNumberGenerator::userRngGenerator().normal_distribution<float>(-0.1F, 0.1F)),
@@ -81,7 +83,7 @@ Unit::Action Unit::GetCurrentAction() const
 
 float Unit::GetHeading() const
 {
-    return m_heading;
+    return m_heading - (glob::game::ENABLE_HEADING_PRECISION ? m_headingBias : 0.0F);
 }
 
 float Unit::GetHealth() const
@@ -103,22 +105,51 @@ std::array<size_t, 3> Unit::GetUnitCosts() const
 {
     auto attMods = GetUnitAttributeModifiers();
 
-    std::array<size_t, 3> resourceCosts{};
+    std::array<float, 3> resourceCosts{};
+    std::array<size_t, 3> resourceCostsBound{};
 
     for (ResourceType resType = 0; resType < ResourceType_COUNT; ++resType)
     {
-        resourceCosts.at(resType) = glob::units::ROBOT_COSTS.at(resType);
+        resourceCosts.at(resType) = static_cast<float>(glob::units::ROBOT_COSTS.at(resType));
 
-        resourceCosts.at(resType) += attMods.health * glob::units::COSTS_PER_HEALTH.at(resType);
-        resourceCosts.at(resType) += attMods.speed * glob::units::COSTS_PER_SPEED.at(resType);
-        resourceCosts.at(resType) += attMods.scanRange * glob::units::COSTS_PER_SCAN_RANGE.at(resType);
-        resourceCosts.at(resType) += attMods.collectRange * glob::units::COSTS_PER_COLLECT_RANGE.at(resType);
-        resourceCosts.at(resType) += attMods.containerSize * glob::units::COSTS_PER_CONTAINER_SIZE.at(resType);
-        resourceCosts.at(resType) += attMods.attackPower * glob::units::COSTS_PER_ATTACK_POWER.at(resType);
-        resourceCosts.at(resType) += attMods.attackRange * glob::units::COSTS_PER_ATTACK_RANGE.at(resType);
+        resourceCosts.at(resType) += static_cast<float>(attMods.health) * glob::units::COSTS_PER_HEALTH.at(resType);
+
+        resourceCosts.at(resType) += std::max(std::min(static_cast<float>(attMods.speed),
+                                                       glob::units::ATTR_MAX_SPEED - glob::units::ATTR_BASE_SPEED),
+                                              -glob::units::ATTR_BASE_SPEED)
+                                     * (attMods.speed > 0 ? glob::units::COSTS_PER_SPEED.at(resType)
+                                                          : glob::units::COSTS_PER_SPEED.at(resType) / 2.0F);
+
+        resourceCosts.at(resType) += std::max(std::min(static_cast<float>(attMods.scanRange),
+                                                       glob::units::ATTR_MAX_SCAN_RANGE - glob::units::ATTR_BASE_SCAN_RANGE),
+                                              -glob::units::ATTR_BASE_SCAN_RANGE)
+                                     * (attMods.scanRange > 0 ? glob::units::COSTS_PER_SCAN_RANGE.at(resType)
+                                                              : glob::units::COSTS_PER_SCAN_RANGE.at(resType) / 2.0F);
+        resourceCosts.at(resType) += std::max(std::min(static_cast<float>(attMods.collectRange),
+                                                       glob::units::ATTR_MAX_COLLECT_RANGE - glob::units::ATTR_BASE_COLLECT_RANGE),
+                                              -glob::units::ATTR_BASE_COLLECT_RANGE)
+                                     * (attMods.collectRange > 0 ? glob::units::COSTS_PER_COLLECT_RANGE.at(resType)
+                                                                 : glob::units::COSTS_PER_COLLECT_RANGE.at(resType) / 2.0F);
+        resourceCosts.at(resType) += static_cast<float>(std::max(std::min(attMods.containerSize,
+                                                                          glob::units::ATTR_MAX_CONTAINER_SIZE - glob::units::ATTR_BASE_CONTAINER_SIZE),
+                                                                 -glob::units::ATTR_BASE_CONTAINER_SIZE))
+                                     * (attMods.containerSize > 0 ? glob::units::COSTS_PER_CONTAINER_SIZE.at(resType)
+                                                                  : glob::units::COSTS_PER_CONTAINER_SIZE.at(resType) / 2.0F);
+        resourceCosts.at(resType) += static_cast<float>(std::max(std::min(attMods.attackPower,
+                                                                          glob::units::ATTR_MAX_ATTACK_POWER - glob::units::ATTR_BASE_ATTACK_POWER),
+                                                                 -glob::units::ATTR_BASE_ATTACK_POWER))
+                                     * (attMods.attackPower > 0 ? glob::units::COSTS_PER_ATTACK_POWER.at(resType)
+                                                                : glob::units::COSTS_PER_ATTACK_POWER.at(resType) / 2.0F);
+        resourceCosts.at(resType) += std::max(std::min(static_cast<float>(attMods.attackRange),
+                                                       glob::units::ATTR_MAX_ATTACK_RANGE - glob::units::ATTR_BASE_ATTACK_RANGE),
+                                              -glob::units::ATTR_BASE_ATTACK_RANGE)
+                                     * (attMods.attackRange > 0 ? glob::units::COSTS_PER_ATTACK_RANGE.at(resType)
+                                                                : glob::units::COSTS_PER_ATTACK_RANGE.at(resType) / 2.0F);
+
+        resourceCostsBound.at(resType) = static_cast<size_t>(std::ceil(std::max(resourceCosts.at(resType), glob::units::ROBOT_COSTS_MIN.at(resType))));
     }
 
-    return resourceCosts;
+    return resourceCostsBound;
 }
 
 bool Unit::IsReloadingWeapons() const
@@ -156,8 +187,7 @@ void Unit::SetHeading(float heading)
 {
     if (glob::game::ENABLE_HEADING_PRECISION)
     {
-        heading += RandomNumberGenerator::userRngGenerator().uniform_real_distribution<float>(-glob::game::ERROR_HEADING_PRECISION / 2.0F,
-                                                                                              glob::game::ERROR_HEADING_PRECISION / 2.0F);
+        heading += m_headingBias;
     }
 
     while (heading < 0)
@@ -193,12 +223,12 @@ void Unit::ApplyUnitAttributeModifiers()
     m_attackRange += static_cast<float>(attMods.attackRange);
 
     m_maxHealth = std::min(m_maxHealth, glob::units::ATTR_MAX_HEALTH);
-    m_speed = std::min(m_speed, glob::units::ATTR_MAX_SPEED);
-    m_scanRange = std::min(m_scanRange, glob::units::ATTR_MAX_SCAN_RANGE);
-    m_collectRange = std::min(m_collectRange, glob::units::ATTR_MAX_COLLECT_RANGE);
-    m_resourceContainerSize = std::min(m_resourceContainerSize, glob::units::ATTR_MAX_CONTAINER_SIZE);
-    m_attackPower = std::min(m_attackPower, glob::units::ATTR_MAX_ATTACK_POWER);
-    m_attackRange = std::min(m_attackRange, glob::units::ATTR_MAX_ATTACK_RANGE);
+    m_speed = std::max(std::min(m_speed, glob::units::ATTR_MAX_SPEED), 0.0F);
+    m_scanRange = std::max(std::min(m_scanRange, glob::units::ATTR_MAX_SCAN_RANGE), 0.0F);
+    m_collectRange = std::max(std::min(m_collectRange, glob::units::ATTR_MAX_COLLECT_RANGE), 0.0F);
+    m_resourceContainerSize = std::max(std::min(m_resourceContainerSize, glob::units::ATTR_MAX_CONTAINER_SIZE), 0);
+    m_attackPower = std::max(std::min(m_attackPower, glob::units::ATTR_MAX_ATTACK_POWER), 0);
+    m_attackRange = std::max(std::min(m_attackRange, glob::units::ATTR_MAX_ATTACK_RANGE), 0.0F);
 
     m_currentHealth = m_maxHealth;
 }

@@ -38,17 +38,17 @@ struct UnitAttributeModifiers
     /// @brief Health of units
     size_t health = 0;
     /// @brief Speed of units
-    size_t speed = 0;
+    int speed = 0;
     /// @brief Scan range of units
-    size_t scanRange = 0;
+    int scanRange = 0;
     /// @brief Resource collecting range of units
-    size_t collectRange = 0;
+    int collectRange = 0;
     /// @brief Amount of resources the robot can collect
-    size_t containerSize = 0;
+    int containerSize = 0;
     /// @brief Amount of damage the robot can deal to other units
-    size_t attackPower = 0;
+    int attackPower = 0;
     /// @brief Range the robot can attack other units in
-    size_t attackRange = 0;
+    int attackRange = 0;
 };
 
 namespace internal
@@ -188,7 +188,7 @@ class Unit
     [[nodiscard]] virtual UnitAttributeModifiers GetUnitAttributeModifiers() const;
 
     /// @brief Apply the unit Attribute Modifiers.
-    virtual void ApplyUnitAttributeModifiers();
+    void ApplyUnitAttributeModifiers();
 
     /// @brief Checks whether the unit is the HQ
     [[nodiscard]] virtual bool IsHeadquarters() const = 0;
@@ -234,6 +234,8 @@ class Unit
 
     /// Direction of the unit measured from North in mathematical positive direction [rad]
     float m_heading = 0.0;
+    /// Heading bias of the unit [rad]
+    float m_headingBias = 0.0;
 
     /// Health of the unit [0, m_maxHealth]
     float m_currentHealth = 100.0F;

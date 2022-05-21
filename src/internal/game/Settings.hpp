@@ -57,7 +57,7 @@ constexpr bool ENABLE_HEADING_PRECISION = false;
 constexpr bool ENABLE_DISTANCE_CLOCK_OFFSET = false;
 
 /// @brief Heading will be set with that precision
-constexpr float ERROR_HEADING_PRECISION = 10.0F * static_cast<float>(M_PI) / 180.0F;
+constexpr float ERROR_HEADING_PRECISION = 20.0F * static_cast<float>(M_PI) / 180.0F;
 
 /// @brief Standard deviation of the clock offset per unit
 constexpr double STDDEV_POSITIONING_CLOCK_OFFSET = 2.0 /* [m] */ / 299'792'458.0;
@@ -83,7 +83,7 @@ constexpr int ATTR_BASE_ATTACK_POWER = 5;
 constexpr float ATTR_BASE_ATTACK_RANGE = 5.0F;
 
 /// @brief Max Health of units
-constexpr float ATTR_MAX_HEALTH = 100.0F;
+constexpr float ATTR_MAX_HEALTH = 200.0F;
 /// @brief Max Speed of units
 constexpr float ATTR_MAX_SPEED = 8.0F;
 /// @brief Max Scan range of units
@@ -129,61 +129,67 @@ constexpr float ATTACK_BLOCK_TIME = 1.0F;
 /// @brief Speed decrease when carrying resources
 constexpr float SPEED_DECREASE_WHILE_CARRYING = 2.0F;
 
-constexpr std::array<size_t, 3> ROBOT_COSTS = {
-    10, // CAPACITOR
-    10, // COIL
-    10, // RESISTOR
+constexpr std::array<float, 3> ROBOT_COSTS = {
+    10.0F, // CAPACITOR
+    10.0F, // COIL
+    10.0F, // RESISTOR
+};
+
+constexpr std::array<float, 3> ROBOT_COSTS_MIN = {
+    1.0F, // CAPACITOR
+    1.0F, // COIL
+    1.0F, // RESISTOR
 };
 
 /// @brief Health per cost
 constexpr int HEALTH_PER_COST = 5;
 
 /// @brief Cost for health increase
-constexpr std::array<size_t, 3> COSTS_PER_HEALTH = {
-    1, // CAPACITOR
-    0, // COIL
-    0, // RESISTOR
+constexpr std::array<float, 3> COSTS_PER_HEALTH = {
+    1.0F, // CAPACITOR
+    0.0F, // COIL
+    0.0F, // RESISTOR
 };
 
 /// @brief Cost for 1 speed increase
-constexpr std::array<size_t, 3> COSTS_PER_SPEED = {
-    0, // CAPACITOR
-    0, // COIL
-    3, // RESISTOR
+constexpr std::array<float, 3> COSTS_PER_SPEED = {
+    0.0F, // CAPACITOR
+    0.0F, // COIL
+    3.0F, // RESISTOR
 };
 
 /// @brief Cost for 1 scan range increase
-constexpr std::array<size_t, 3> COSTS_PER_SCAN_RANGE = {
-    2, // CAPACITOR
-    0, // COIL
-    1, // RESISTOR
+constexpr std::array<float, 3> COSTS_PER_SCAN_RANGE = {
+    2.0F, // CAPACITOR
+    0.0F, // COIL
+    1.0F, // RESISTOR
 };
 
 /// @brief Cost for 1 collect range increase
-constexpr std::array<size_t, 3> COSTS_PER_COLLECT_RANGE = {
-    3, // CAPACITOR
-    0, // COIL
-    2, // RESISTOR
+constexpr std::array<float, 3> COSTS_PER_COLLECT_RANGE = {
+    3.0F, // CAPACITOR
+    0.0F, // COIL
+    2.0F, // RESISTOR
 };
 
 /// @brief Cost for 1 collect range increase
-constexpr std::array<size_t, 3> COSTS_PER_CONTAINER_SIZE = {
-    3, // CAPACITOR
-    1, // COIL
-    2, // RESISTOR
+constexpr std::array<float, 3> COSTS_PER_CONTAINER_SIZE = {
+    3.0F, // CAPACITOR
+    1.0F, // COIL
+    2.0F, // RESISTOR
 };
 
 /// @brief Cost for 1 attack power increase
-constexpr std::array<size_t, 3> COSTS_PER_ATTACK_POWER = {
-    0, // CAPACITOR
-    2, // COIL
-    0, // RESISTOR
+constexpr std::array<float, 3> COSTS_PER_ATTACK_POWER = {
+    0.0F, // CAPACITOR
+    2.0F, // COIL
+    0.0F, // RESISTOR
 };
 /// @brief Cost for 1 attack range increase
-constexpr std::array<size_t, 3> COSTS_PER_ATTACK_RANGE = {
-    0, // CAPACITOR
-    1, // COIL
-    0, // RESISTOR
+constexpr std::array<float, 3> COSTS_PER_ATTACK_RANGE = {
+    0.0F, // CAPACITOR
+    1.0F, // COIL
+    0.0F, // RESISTOR
 };
 
 } // namespace units
