@@ -218,8 +218,8 @@ void Unit::ApplyUnitAttributeModifiers()
     m_speed += static_cast<float>(attMods.speed);
     m_scanRange += static_cast<float>(attMods.scanRange);
     m_collectRange += static_cast<float>(attMods.collectRange);
-    m_resourceContainerSize += static_cast<int>(attMods.containerSize);
-    m_attackPower += static_cast<int>(attMods.attackPower);
+    m_resourceContainerSize += attMods.containerSize;
+    m_attackPower += attMods.attackPower;
     m_attackRange += static_cast<float>(attMods.attackRange);
 
     m_maxHealth = std::min(m_maxHealth, glob::units::ATTR_MAX_HEALTH);
