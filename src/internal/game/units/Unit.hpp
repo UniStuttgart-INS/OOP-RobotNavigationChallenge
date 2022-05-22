@@ -7,6 +7,8 @@
 
 #include <Eigen/Core>
 #include <memory>
+#include <array>
+#include <vector>
 
 #include <imgui.h>
 #include "internal/game/resources/Resource.hpp"
