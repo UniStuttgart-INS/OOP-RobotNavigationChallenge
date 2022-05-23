@@ -138,7 +138,7 @@ std::pair<Eigen::Vector2f, float> GameState::GetNewSatellitePositionAndHeading()
     else if (startBorder == 1 || startBorder == 3) // Right || Left
     {
         auto center = (glob::game::BOARD_HEIGHT.at(0) + glob::game::BOARD_HEIGHT.at(1)) / 2.0;
-        auto range = (glob::game::BOARD_HEIGHT.at(0) - glob::game::BOARD_HEIGHT.at(1)) / 2.0;
+        auto range = std::abs(glob::game::BOARD_HEIGHT.at(0) - glob::game::BOARD_HEIGHT.at(1)) / 2.0;
         pos = Eigen::Vector2f{ glob::game::BOARD_WIDTH.at(startBorder % 3),
                                RandomNumberGenerator::gameRngGenerator().normal_distribution<>(center, 0.8 * range, glob::game::BOARD_HEIGHT.at(0), glob::game::BOARD_HEIGHT.at(1)) };
     }
