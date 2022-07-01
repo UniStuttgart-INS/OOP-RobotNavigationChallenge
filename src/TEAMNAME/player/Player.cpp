@@ -10,6 +10,8 @@ namespace oop::TEAMNAME
 Player::Player(const Eigen::Vector2f& position, const ImColor& color)
     : internal::PlayerBase(position, color)
 {
+    m_name = "Set player name here";
+
     // Add starting units
     for (size_t i = 0; i < 3; i++)
     {

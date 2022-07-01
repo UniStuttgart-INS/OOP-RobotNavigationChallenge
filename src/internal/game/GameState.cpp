@@ -542,7 +542,7 @@ void GameState::DrawGameStats(float availableWidth)
                           ImVec2(availableWidth - 2.0F * ImGui::GetStyle().WindowPadding.x, player->m_gid ? heightPlayer : heightPlayerVirus), true);
 
         ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[2]);
-        ImGui::TextUnformatted(player->m_gid ? "Player" : "Virus");
+        ImGui::TextUnformatted(player->m_gid ? player->GetName().c_str() : "Virus");
         ImGui::PopFont();
         ImGui::SameLine();
         ImGui::ColorButton(fmt::format("##player color {}", player->m_gid).c_str(), player->m_color.Value, ImGuiColorEditFlags_NoTooltip, ImVec2(30, 30));

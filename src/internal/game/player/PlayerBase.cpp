@@ -25,6 +25,11 @@ size_t PlayerBase::GetGid() const
     return m_gid;
 }
 
+const std::string& PlayerBase::GetName() const
+{
+    return m_name;
+}
+
 ImColor PlayerBase::GetColor() const
 {
     return m_color;

@@ -47,6 +47,9 @@ class PlayerBase
     /// @brief Get the global Id to identify the player
     [[nodiscard]] size_t GetGid() const;
 
+    /// @brief Get the name of the player
+    [[nodiscard]] const std::string& GetName() const;
+
     /// @brief Return the player color
     [[nodiscard]] ImColor GetColor() const;
 
@@ -66,6 +69,14 @@ class PlayerBase
     /// @brief Spawns the unit at the headquarters. Only works if enough resources available
     /// @param[in] unit Shared_ptr to the unit to spawn
     void SpawnUnit(const std::shared_ptr<Unit>& unit);
+
+    // ###########################################################################################################
+    //                           Protected content (only accessible from child classes)
+    // ###########################################################################################################
+
+  protected:
+    /// Name of the player
+    std::string m_name = "Player";
 
     // ###########################################################################################################
     //                                      Private content (inaccessible)
