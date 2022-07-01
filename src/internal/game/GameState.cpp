@@ -178,17 +178,53 @@ void GameState::OnStart()
 
     for (size_t p = 0; p < glob::game::NUM_PLAYERS; p++)
     {
-        auto startPosition = Eigen::Vector2f{ RandomNumberGenerator::gameRngGenerator().uniform_real_distribution<double>(glob::game::BOARD_WIDTH.at(0) * 0.9,
-                                                                                                                          glob::game::BOARD_WIDTH.at(1) * 0.9),
-                                              RandomNumberGenerator::gameRngGenerator().uniform_real_distribution<double>(glob::game::BOARD_HEIGHT.at(0) * 0.9,
-                                                                                                                          glob::game::BOARD_HEIGHT.at(1) * 0.9) };
-        // Create Player
-        players.push_back(std::make_shared<TEAMNAME::Player>(startPosition, ImPlot::GetColormapColor(5 - static_cast<int>(p), ImPlot::GetColormapIndex("Dark"))));
-        itemsCloseToPlayer.push_back(0); // Tracks resource positions relative to player
+        Eigen::Vector2f startPosition;
+        bool playerTooClose = false;
+        size_t maxIterCount = 0;
+        do
+        {
+            playerTooClose = false;
+            auto heading = RandomNumberGenerator::gameRngGenerator().uniform_real_distribution<float>(0, 2.0 * static_cast<float>(M_PI));
+            auto radius = 0.8F * glob::game::BOARD_WIDTH.at(1);
+
+            startPosition = radius * Eigen::Vector2f{ std::cos(heading), std::sin(heading) };
+            for (size_t i = 1; i < players.size(); i++)
+            {
+                if ((players.at(i)->GetHeadquarterPosition() - startPosition).norm() < 0.8 * glob::game::BOARD_WIDTH.at(1))
+                {
+                    playerTooClose = true;
+                    break;
+                }
+            }
+            maxIterCount++;
+            if (maxIterCount > 100)
+            {
+                break;
+            }
+        } while (playerTooClose);
+
+        switch (p)
+        {
+        case 0:
+        default:
+            players.push_back(std::make_shared<TEAMNAME::Player>(startPosition, ImPlot::GetColormapColor(5 - static_cast<int>(p), ImPlot::GetColormapIndex("Dark"))));
+            break;
+        }
+
+        // Tracks resource positions relative to player
+        itemsCloseToPlayer.push_back(0);
 
         // Spawn Headquarters
         auto hqHeading = RandomNumberGenerator::gameRngGenerator().uniform_real_distribution<float>(0, 2.0F * static_cast<float>(M_PI));
-        players.back()->AddUnit(std::make_shared<TEAMNAME::Headquarters>(players.back().get(), GetNextGID(), startPosition, hqHeading));
+
+        switch (p)
+        {
+        case 0:
+        default:
+            players.back()->AddUnit(std::make_shared<TEAMNAME::Headquarters>(players.back().get(), GetNextGID(), startPosition, hqHeading));
+            break;
+        }
+
         if (players.back()->m_units.size() > 1) // HQ constructor adds units so the HQ actually gets added last
         {
             std::swap(players.back()->m_units.front(), players.back()->m_units.back());
