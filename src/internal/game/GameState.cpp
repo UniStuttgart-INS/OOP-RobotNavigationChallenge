@@ -357,22 +357,26 @@ void GameState::Update(float deltaTime)
     // --------------------------------------------- Win condition -----------------------------------------------
     if (!GameApplication::gameFinished)
     {
-        if (resources.empty()) // All resources collected
+        if (resources.empty()                                                                   // All resources collected
+            || GameApplication::gameTime >= static_cast<float>(GameApplication::gameTimeLimit)) // Game time exceeded
         {
             bool unitCarryingResources = false;
-            for (const auto& player : players)
+            if (GameApplication::gameTime < static_cast<float>(GameApplication::gameTimeLimit)) // only check if units carrying resources if within game time
             {
-                for (const auto& unit : player->m_units)
+                for (const auto& player : players)
                 {
-                    if (unit->m_resourcesCarried.second)
+                    for (const auto& unit : player->m_units)
                     {
-                        unitCarryingResources = true;
+                        if (unit->m_resourcesCarried.second)
+                        {
+                            unitCarryingResources = true;
+                            break;
+                        }
+                    }
+                    if (unitCarryingResources)
+                    {
                         break;
                     }
-                }
-                if (unitCarryingResources)
-                {
-                    break;
                 }
             }
             if (!unitCarryingResources) // No unit carrying resources
@@ -429,9 +433,10 @@ void GameState::Update(float deltaTime)
             GameApplication::gameRunning = false;
             GameApplication::gameFinished = 2;
         }
-        else if (glob::game::ENABLE_PVP                                // PVP enabled
-                 && players.size() > 2                                 // Multiplayer
-                 && (playersAlive == 1 && !glob::game::NEUTRAL_UNITS)) // Only one player alive and no neutral units spawned
+        else if (glob::game::ENABLE_PVP                                               // PVP enabled
+                 && players.size() > 2                                                // Multiplayer
+                 && playersAlive == 1                                                 // Only one player alive
+                 && (!glob::game::NEUTRAL_UNITS || players.front()->m_units.empty())) // No neutral units alive
         {
             GameApplication::gameRunning = false;
             GameApplication::gameFinished = 2;

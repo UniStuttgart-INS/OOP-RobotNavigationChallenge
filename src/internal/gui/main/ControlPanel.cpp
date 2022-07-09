@@ -67,6 +67,14 @@ void ControlPanel::Draw(float panelWidth, float panelTotalWidth)
 
     GameState::DrawGameStats(panelTotalWidth - 2 * ImGui::GetStyle().WindowPadding.x);
 
+    ImGui::SetNextItemWidth(80);
+    int32_t gameTimeLim = GameApplication::gameTimeLimit;
+    ImGui::InputInt("Game time limit [s]", &gameTimeLim, 0, 0);
+    if (GameApplication::gameTimeLimit != gameTimeLim && !ImGui::IsItemActive())
+    {
+        GameApplication::gameTimeLimit = gameTimeLim;
+    }
+
     if (glob::debug::SHOW_DEBUG_CONFIG)
     {
         ImGui::SetNextItemWidth(80);

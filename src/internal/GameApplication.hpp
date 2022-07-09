@@ -38,6 +38,9 @@ class GameApplication : public Application
     /// @brief Time of this run
     static inline float gameTime = 0.0F;
 
+    /// @brief Game time limit in seconds
+    static inline int32_t gameTimeLimit = 3600;
+
     /// @brief Flag whether the game is running
     static inline bool gameRunning = false;
 
