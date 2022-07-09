@@ -132,7 +132,7 @@ void Virus::Think(float deltaTime)
     {
         if (scannedUnit.isHQ && m_currentHealth < m_maxHealth)
         {
-            spdlog::debug("Virus [{}]: Ran into headquarters. Fleeing!", GetGid());
+            spdlog::trace("Virus [{}]: Ran into headquarters. Fleeing!", GetGid());
             m_targetGid = 0;
             m_fleeTime = FLEE_TIME;
             state = State::Exploring;
@@ -150,7 +150,7 @@ void Virus::Think(float deltaTime)
                 {
                     m_targetGid = scannedUnit.gid;
                     state = State::Attacking;
-                    spdlog::debug("Virus [{}]: Found unit {}. Start Attacking!", GetGid(), m_targetGid);
+                    spdlog::trace("Virus [{}]: Found unit {}. Start Attacking!", GetGid(), m_targetGid);
                     break;
                 }
 
@@ -161,7 +161,7 @@ void Virus::Think(float deltaTime)
                     {
                         m_targetGid = scannedUnit.gid;
                         state = State::Attacking;
-                        spdlog::debug("Virus [{}]: Switching target to {}. Start Attacking!", GetGid(), m_targetGid);
+                        spdlog::trace("Virus [{}]: Switching target to {}. Start Attacking!", GetGid(), m_targetGid);
                         break;
                     }
                 }
@@ -172,7 +172,7 @@ void Virus::Think(float deltaTime)
     if (state == State::Idle)
     {
         auto heading = static_cast<float>(RandomNumberGenerator::userRngGenerator().uniform_real_distribution<>(0.0, 2.0 * M_PI));
-        spdlog::debug("Virus [{}]: Exploring into direction {}°", GetGid(), heading * 180.0F / static_cast<float>(M_PI));
+        spdlog::trace("Virus [{}]: Exploring into direction {}°", GetGid(), heading * 180.0F / static_cast<float>(M_PI));
         m_targetGid = 0;
         state = State::Exploring;
         DoMove(heading);
@@ -197,7 +197,7 @@ void Virus::Think(float deltaTime)
             auto heading = static_cast<float>(RandomNumberGenerator::userRngGenerator().normal_distribution<double>(-M_PI_2, M_PI_2));
             heading += static_cast<float>(border) * static_cast<float>(M_PI_2);
 
-            spdlog::debug("Virus [{}]: Border reached [x: {}, y: {}] set new heading {}°", GetGid(), m_pos.x(), m_pos.y(), heading * 180.0F / static_cast<float>(M_PI));
+            spdlog::trace("Virus [{}]: Border reached [x: {}, y: {}] set new heading {}°", GetGid(), m_pos.x(), m_pos.y(), heading * 180.0F / static_cast<float>(M_PI));
             DoMove(heading);
             return;
         }
@@ -229,7 +229,7 @@ void Virus::Think(float deltaTime)
             }
         }
         // Unit is not in scan range anymore
-        spdlog::debug("Virus [{}]: Lost unit {}. Continuing exploring.", GetGid(), m_targetGid);
+        spdlog::trace("Virus [{}]: Lost unit {}. Continuing exploring.", GetGid(), m_targetGid);
         m_targetGid = 0;
         state = State::Idle;
         return;

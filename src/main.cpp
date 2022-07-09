@@ -6,7 +6,7 @@
 int main(int argc, const char* argv[])
 {
     auto console_sink = spdlog::stdout_color_mt("console");
-    console_sink->set_level(spdlog::level::trace);
+    console_sink->set_level(spdlog::level::debug);
     console_sink->set_pattern("[%H:%M:%S.%e] [%^%L%$] %v");
     spdlog::set_default_logger(console_sink);
 
