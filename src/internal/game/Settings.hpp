@@ -248,4 +248,11 @@ const ImColor COLOR_SELECTED{ 255, 255, 255, 160 };
 const ImColor COLOR_HOVERED{ 224, 224, 224, 90 };
 } // namespace gui
 
+namespace camera
+{
+/// @brief Duration the game slows down when attacks happen in seconds
+float inline GAME_SLOW_DOWN_DURATION = 3.0F;
+
+} // namespace camera
+
 } // namespace oop::glob

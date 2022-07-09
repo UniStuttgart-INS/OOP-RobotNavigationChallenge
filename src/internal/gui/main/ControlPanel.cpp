@@ -47,7 +47,10 @@ void ControlPanel::Draw(float panelWidth, float panelTotalWidth)
 
     ImGui::SameLine();
     ImGui::SetNextItemWidth(panelWidth - (ImGui::GetCursorPosX() - cursorPosX));
-    ImGui::SliderFloat("Game Time Modifier##Slider", &GameApplication::gameTimeModifier, 0.1F, 50.0F, "%.1f", ImGuiSliderFlags_AlwaysClamp);
+    if (ImGui::SliderFloat("Game Time Modifier##Slider", &GameApplication::gameTimeModifier, 0.1F, 50.0F, "%.1f", ImGuiSliderFlags_AlwaysClamp))
+    {
+        GameApplication::slowDownGameTimeModifierBackup = 0.0F;
+    }
 
     cursorPosX = ImGui::GetCursorPosX();
     ImGui::Checkbox("##useSeedInsteadOfSystemTime", &RandomNumberGenerator::gameRngGenerator().useSeedInsteadOfSystemTime);
@@ -81,6 +84,11 @@ void ControlPanel::Draw(float panelWidth, float panelTotalWidth)
         ImGui::DragFloat("Update Time step [s]", &glob::game::UPDATE_TIME_STEP, 1e-3F, 1e-3F, 1e-0F, "%.3f", ImGuiSliderFlags_AlwaysClamp);
         ImGui::SameLine();
         gui::widgets::HelpMarker("This greatly affects game performance, however it also controls the interval the game logic is triggered and can therefore change the outcome.");
+
+        ImGui::Checkbox("Controlled camera", &GameApplication::controlledCamera);
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(120);
+        ImGui::SliderFloat("Slow Down Speed##Slider", &GameApplication::slowDownSpeed, 0.1F, 50.0F, "%.1f", ImGuiSliderFlags_AlwaysClamp);
 
         ImGui::Checkbox("Draw unit healthbar", &glob::debug::DRAW_UNIT_HEALTH_BAR);
         ImGui::Checkbox("Draw unit scan range", &glob::debug::DRAW_UNIT_SCAN_RANGE);

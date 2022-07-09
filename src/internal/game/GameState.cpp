@@ -167,6 +167,8 @@ void GameState::OnStart()
     RandomNumberGenerator::userRngGenerator().seed = RandomNumberGenerator::gameRngGenerator().uniform_int_distribution<uint64_t>();
     RandomNumberGenerator::userRngGenerator().reset();
 
+    GameApplication::EndSlowDownGame(3600.0F);
+
     // ----------------------------------------------- Start new -------------------------------------------------
 
     std::array<float, ResourceType_COUNT> availableResources{};
@@ -270,6 +272,8 @@ void GameState::Update(float deltaTime)
 
     if (GameApplication::gameRunning)
     {
+        GameApplication::EndSlowDownGame(deltaTime);
+
         for (auto& satellite : satellites)
         {
             satellite.Update(deltaTime);

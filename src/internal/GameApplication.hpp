@@ -62,6 +62,23 @@ class GameApplication : public Application
     /// @brief Texture of a coil (2036x1484)
     static inline ImTextureID logoTexture = nullptr;
 
+    /// @brief Controls the camera, slows down the game while fights happen
+    static inline bool controlledCamera = false;
+
+    /// @brief Game speed when slowing down
+    static inline float slowDownSpeed = 10.0F;
+    /// @brief Time the game is being slowed down
+    static inline float slowDownCounterTime = 0.0F;
+    /// @brief Game time modifier backup
+    static inline float slowDownGameTimeModifierBackup = 0.0F;
+
+    /// @brief Slows down the game when attacks happen during controlled camera mode
+    static void BeginSlowDownGame();
+
+    /// @brief Ends the slow down during controlled camera mode
+    /// @param[in] deltaTime Time since last frame
+    static void EndSlowDownGame(float deltaTime);
+
     friend class RandomNumberGenerator;
     friend class GlobalWindows;
     friend class ControlPanel;
@@ -70,6 +87,7 @@ class GameApplication : public Application
     friend class Satellite;
     friend class Resource;
     friend class Virus;
+    friend class Unit;
 };
 
 } // namespace oop::internal

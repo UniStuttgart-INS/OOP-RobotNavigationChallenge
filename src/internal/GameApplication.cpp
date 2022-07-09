@@ -55,4 +55,33 @@ void GameApplication::OnFrame(float deltaTime)
     }
 }
 
+void GameApplication::BeginSlowDownGame()
+{
+    slowDownCounterTime = 0.0F;
+    if (slowDownGameTimeModifierBackup == 0.0F)
+    {
+        slowDownGameTimeModifierBackup = gameTimeModifier;
+        gameTimeModifier = slowDownSpeed;
+    }
+}
+
+void GameApplication::EndSlowDownGame(float deltaTime)
+{
+    slowDownCounterTime += deltaTime;
+    if (slowDownGameTimeModifierBackup != 0.0F)
+    {
+        if (auto slowDownDuration = glob::camera::GAME_SLOW_DOWN_DURATION * slowDownSpeed;
+            slowDownCounterTime <= slowDownDuration)
+        {
+            gameTimeModifier = slowDownSpeed
+                               + (1.0F - (slowDownDuration - slowDownCounterTime) / slowDownDuration) * (slowDownGameTimeModifierBackup - slowDownSpeed);
+        }
+        else
+        {
+            gameTimeModifier = slowDownGameTimeModifierBackup;
+            slowDownGameTimeModifierBackup = 0.0F;
+        }
+    }
+}
+
 } // namespace oop::internal

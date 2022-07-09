@@ -4,6 +4,7 @@
 #include <implot.h>
 #include "internal/gui/helper/ImPlotHelper.hpp"
 
+#include "internal/GameApplication.hpp"
 #include "internal/game/GameState.hpp"
 #include "internal/game/Settings.hpp"
 #include "internal/helper/RandomNumberGenerator.hpp"
@@ -310,12 +311,18 @@ void Unit::Draw() const
         ImPlot::GetPlotDrawList()->AddCircleFilled(ImPlot::PlotToPixels(m_pos.x(), m_pos.y()), static_cast<float>(PlotToPixel(0.1)), ImColor{ 255, 0, 0 });
     }
 
-    if (constexpr float attackAnimationDuration = 0.5F;
+    if (constexpr float attackAnimationDuration = glob::units::ATTACK_BLOCK_TIME - 0.8F;
         m_attackBlockTime > attackAnimationDuration)
     {
         ImPlot::GetPlotDrawList()->AddLine(ImPlot::PlotToPixels(m_pos.x(), m_pos.y()),
                                            ImPlot::PlotToPixels(m_lastAttackedUnitPosition.x(), m_lastAttackedUnitPosition.y()),
                                            ImColor{ 1.0F, 0.0F, 0.0F, (m_attackBlockTime - attackAnimationDuration) / (1.0F - attackAnimationDuration) });
+        if (GameApplication::controlledCamera)
+        {
+            ImPlot::GetPlotDrawList()->AddCircleFilled(ImPlot::PlotToPixels(m_lastAttackedUnitPosition.x(), m_lastAttackedUnitPosition.y()),
+                                                       static_cast<float>(PlotToPixel(4.0)),
+                                                       ImColor{ 1.0F, 0.0F, 0.0F, 0.3F });
+        }
     }
 }
 
@@ -462,6 +469,10 @@ void Unit::Update(float deltaTime)
 
                     targetUnit->m_currentHealth -= static_cast<float>(m_attackPower);
                     m_attackBlockTime = glob::units::ATTACK_BLOCK_TIME;
+                    if (GameApplication::controlledCamera)
+                    {
+                        GameApplication::BeginSlowDownGame();
+                    }
                     m_lastAttackedUnitPosition = targetUnit->m_pos;
                     break;
                 }
