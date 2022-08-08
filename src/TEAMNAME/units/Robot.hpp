@@ -15,6 +15,9 @@ class Robot : public internal::RobotBase
 {
   public:
     /// @brief Constructor
+    /// @param[in] parent Player owning the headquarter
+    /// @param[in] position Position
+    /// @param[in] heading Initial heading
     Robot(internal::PlayerBase* parent, const Eigen::Vector2f& position, float heading);
 
     /// @brief Destructor

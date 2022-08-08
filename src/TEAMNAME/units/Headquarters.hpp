@@ -14,6 +14,10 @@ class Headquarters : public internal::HeadquartersBase
 {
   public:
     /// @brief Constructor
+    /// @param[in] parent Player owning the headquarter
+    /// @param[in] gid Global id of the headquarter
+    /// @param[in] position Position
+    /// @param[in] heading Initial heading
     Headquarters(internal::PlayerBase* parent, size_t gid, const Eigen::Vector2f& position, float heading);
 
     /// @brief Destructor

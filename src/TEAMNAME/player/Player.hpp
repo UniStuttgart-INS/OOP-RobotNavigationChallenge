@@ -13,6 +13,8 @@ class Player : public internal::PlayerBase
 {
   public:
     /// @brief Default Constructor
+    /// @param[in] position Position of the headquarter
+    /// @param[in] color Color of the player
     Player(const Eigen::Vector2f& position, const ImColor& color);
 
     /// @brief Destructor
