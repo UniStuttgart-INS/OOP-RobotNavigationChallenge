@@ -205,6 +205,7 @@ void GameState::OnStart()
             }
         } while (playerTooClose);
 
+        // Create Player
         switch (p)
         {
         case 0:

@@ -51,15 +51,14 @@ set_project_warnings(project_warnings) # set standard compiler warnings
 
 
 # ##################################################################################################
-# Conan Packages
-# ##################################################################################################
-
-include(cmake/Conan.cmake)
-run_conan()
-
-# ##################################################################################################
 # Libraries (inlcude as SYSTEM, to prevent Static Analazers to scan them)
 # ##################################################################################################
+
+# ---------------------------------------------- Conan ---------------------------------------------
+
+find_package(fmt REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 # ---------------------------------------------- imgui ---------------------------------------------
 
@@ -101,8 +100,8 @@ set_target_properties(application PROPERTIES CXX_CPPCHECK "")
 # ##################################################################################################
 
 # Specify output path for executable files
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR}/build/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}/build/bin)
 
 # ##################################################################################################
 

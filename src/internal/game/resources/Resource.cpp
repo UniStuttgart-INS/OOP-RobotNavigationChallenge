@@ -19,7 +19,7 @@ std::string Resource::GetTypeName() const
 
 std::string Resource::GetTypeName(ResourceType type)
 {
-    switch (type)
+    switch (type) // NOLINT(hicpp-multiway-paths-covered) False positive
     {
     case ResourceType_Capacitor:
         return "Capacitor";
@@ -167,7 +167,7 @@ ImColor Resource::color() const
 
 ImColor Resource::color(ResourceType type)
 {
-    switch (type)
+    switch (type) // NOLINT(hicpp-multiway-paths-covered) False positive
     {
     case ResourceType_Capacitor:
         return { 204, 204, 255 };

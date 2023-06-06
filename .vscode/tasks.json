@@ -4,7 +4,7 @@
         // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
         // ║                                        CLEAN Tasks                                       ║
         // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
-        { // Remove Build Files
+        {
             "label": "Clean: Remove Build Files",
             "type": "shell",
             "group": "build",
@@ -13,14 +13,12 @@
                 "args": [
                     "-rf",
                     "build",
-                    "bin",
                 ],
             },
             "windows": {
                 "command": "Remove-Item",
                 "args": [
                     "-Recurse",
-                    "bin,",
                     "build",
                 ]
             },
@@ -32,10 +30,47 @@
             "problemMatcher": [],
         },
         // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
+        // ║                                       Conan Tasks                                        ║
+        // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
+        {
+            "label": "Debug: Conan",
+            "type": "shell",
+            "group": "build",
+            "command": "conan",
+            "args": [
+                "install",
+                ".",
+                "--build=missing",
+                "-s",
+                "build_type=Debug",
+            ],
+            "presentation": {
+                "clear": true,
+            },
+            "problemMatcher": [],
+        },
+        {
+            "label": "Release: Conan",
+            "type": "shell",
+            "group": "build",
+            "command": "conan",
+            "args": [
+                "install",
+                ".",
+                "--build=missing",
+                "-s",
+                "build_type=Release",
+            ],
+            "presentation": {
+                "clear": true,
+            },
+            "problemMatcher": [],
+        },
+        // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
         // ║                                        CMAKE Tasks                                       ║
         // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
-        { // Cmake
-            "label": "Cmake",
+        {
+            "label": "Release: Cmake",
             "type": "shell",
             "group": "build",
             "command": "cmake",
@@ -43,6 +78,7 @@
                 "-Bbuild/Release",
                 "-S.",
                 "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/Release/generators/conan_toolchain.cmake",
             ],
             "linux": {
                 "options": {
@@ -56,16 +92,20 @@
                 "options": {
                     "env": {
                         "VSLANG": "1033",
+                        "chcp": "1252",
                     }
                 },
             },
             "presentation": {
                 "clear": true,
             },
+            "dependsOn": [
+                "Release: Conan",
+            ],
             "problemMatcher": [],
         },
-        { // Cmake
-            "label": "Cmake Debug",
+        {
+            "label": "Debug: Cmake",
             "type": "shell",
             "group": "build",
             "command": "cmake",
@@ -73,6 +113,7 @@
                 "-Bbuild/Debug",
                 "-S.",
                 "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/Debug/generators/conan_toolchain.cmake",
             ],
             "linux": {
                 "options": {
@@ -86,98 +127,100 @@
                 "options": {
                     "env": {
                         "VSLANG": "1033",
+                        "chcp": "1252",
                     }
                 },
             },
             "presentation": {
                 "clear": true,
             },
+            "dependsOn": [
+                "Debug: Conan",
+            ],
             "problemMatcher": [],
         },
         // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
         // ║                                       Build Tasks                                        ║
         // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
-        { // Build project
-            "label": "Build",
+        {
+            "label": "Release: Build",
             "type": "shell",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "command": "cmake",
-            "linux": {
-                "args": [
-                    "--build",
-                    "build/Release",
-                    "--",
-                    "-j8",
-                ],
-            },
+            "args": [
+                "--build",
+                "build/Release",
+                "--parallel8",
+            ],
             "windows": {
-                "args": [
-                    "--build",
-                    "build/Release",
-                    "--",
-                    "-maxCpuCount",
-                ],
                 "options": {
                     "env": {
                         "VSLANG": "1033",
+                        "chcp": "1252",
                     }
                 },
             },
             "dependsOn": [
-                "Cmake",
+                "Release: Cmake",
             ],
             "problemMatcher": [],
         },
-        { // Build project
-            "label": "Build Debug",
+        {
+            "label": "Debug: Build",
             "type": "shell",
             "group": {
                 "kind": "build",
             },
             "command": "cmake",
-            "linux": {
-                "args": [
-                    "--build",
-                    "build/Debug",
-                    "--",
-                    "-j8",
-                ],
-            },
+            "args": [
+                "--build",
+                "build/Debug",
+                "--parallel8",
+            ],
             "windows": {
-                "args": [
-                    "--build",
-                    "build/Debug",
-                    "--",
-                    "-maxCpuCount",
-                ],
                 "options": {
                     "env": {
                         "VSLANG": "1033",
+                        "chcp": "1252",
                     }
                 },
             },
             "dependsOn": [
-                "Cmake Debug",
+                "Debug: Cmake",
             ],
             "problemMatcher": [],
         },
         // ╔══════════════════════════════════════════════════════════════════════════════════════════╗
         // ║                                        Run Tasks                                         ║
         // ╚══════════════════════════════════════════════════════════════════════════════════════════╝
-        { // Build & run project
-            "label": "Build & run",
+        {
+            "label": "Debug: Build & run",
             "type": "shell",
             "group": {
                 "kind": "test",
                 "isDefault": true
             },
-            "command": "./bin/oop-robot-navigation-challenge",
+            "command": "./build/bin/oop-robot-navigation-challenge",
             "args": [],
             "dependsOn": [
-                "Build",
+                "Debug: Build",
+            ],
+            "problemMatcher": [],
+        },
+        {
+            "label": "Release: Build & run",
+            "type": "shell",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "command": "./build/bin/oop-robot-navigation-challenge",
+            "args": [],
+            "dependsOn": [
+                "Release: Build",
             ],
             "problemMatcher": [],
         },

@@ -19,6 +19,6 @@ target_link_libraries(${PROJECT_NAME_LOWERCASE} PRIVATE project_options
                                                         application
                                                         imgui
                                                         implot
-                                                        CONAN_PKG::fmt
-                                                        CONAN_PKG::spdlog
-                                                        CONAN_PKG::eigen)
+                                                        fmt::fmt
+                                                        spdlog::spdlog
+                                                        Eigen3::Eigen)

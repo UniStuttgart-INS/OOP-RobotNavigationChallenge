@@ -20,5 +20,7 @@
         // "lib": true,
         // "src/internal": true,
         "ImGui.ini": true,
+        "CMakeUserPresets.json": true,
+        "compile_commands.json": true,
     },
 }
