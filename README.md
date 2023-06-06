@@ -29,19 +29,24 @@ As Robots are technical machines, they have certain limitations:
 git clone --recurse-submodules https://github.com/UniStuttgart-INS/OOP-RobotNavigationChallenge.git
 ```
 
+##### Conan
+```shell
+conan install . --build=missing -s build_type=Release
+```
+
 ##### Cmake
 ```shell
-cmake -Bbuild/Release -S. -DCMAKE_BUILD_TYPE=Release
+cmake -Bbuild/Release -S. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=build/Release/generators/conan_toolchain.cmake
 ```
 
 ##### Build
 ```shell
-cmake --build build/Release
+cmake --build build/Release --config Release --parallel8
 ```
 
 ##### Run the executable
 ```shell
-./bin/oop-robot-navigation-challenge
+./build/bin/oop-robot-navigation-challenge
 ```
 
 ### Development Environment Setup
@@ -53,6 +58,7 @@ Most library dependencies are managed by Conan.io, so you just need to install t
 ```shell
 sudo pacman -S base-devel cmake clang glfw-x11
 yay -S conan # AUR package
+conan profile detect --force
 ```
 
 #### Ubuntu 22.04
@@ -61,6 +67,7 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install -y build-essential clang cmake python3-pip libglfw3-dev libglfw3
 pip3 install conan --user
+conan profile detect --force
 ```
 
 #### MacOS
@@ -72,6 +79,7 @@ brew update
 brew install cmake llvm conan glfw3
 ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
 ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+conan profile detect --force
 ```
 
 #### Windows
