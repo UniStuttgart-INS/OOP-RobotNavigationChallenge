@@ -153,6 +153,8 @@
             "args": [
                 "--build",
                 "build/Release",
+                "--config",
+                "Release",
                 "--parallel8",
             ],
             "windows": {
@@ -178,6 +180,8 @@
             "args": [
                 "--build",
                 "build/Debug",
+                "--config",
+                "Debug",
                 "--parallel8",
             ],
             "windows": {
