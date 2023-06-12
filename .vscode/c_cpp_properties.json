@@ -23,7 +23,7 @@
                 "${workspaceFolder}/lib/imgui",
                 "${workspaceFolder}/lib/imgui/misc/cpp",
                 "${workspaceFolder}/lib/implot",
-                "~/.conan/data/**"
+                "~/.conan2/p/**"
             ],
             "defines": [
                 "_DEBUG",

@@ -25,9 +25,11 @@ As Robots are technical machines, they have certain limitations:
 ### Working with the Repository
 
 ##### Git
-```
-git clone --recurse-submodules https://github.com/UniStuttgart-INS/OOP-RobotNavigationChallenge.git
-```
+- Command-line (Windows users need to install [Git](https://git-scm.com/download/win))
+    ```
+    git clone --recurse-submodules https://github.com/UniStuttgart-INS/OOP-RobotNavigationChallenge.git
+    ```
+- When downloading the Zip (instead of using command-line), make sure to manually download the libraries in the `lib` folder.
 
 ##### Conan
 ```shell
@@ -36,7 +38,10 @@ conan install . --build=missing -s build_type=Release
 
 ##### Cmake
 ```shell
-cmake -Bbuild/Release -S. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=build/Release/generators/conan_toolchain.cmake
+# Linux
+cmake -Bbuild/Release -S. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="build/Release/generators/conan_toolchain.cmake"
+# Windows
+cmake -Bbuild/Release -S. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="build/generators/conan_toolchain.cmake"
 ```
 
 ##### Build

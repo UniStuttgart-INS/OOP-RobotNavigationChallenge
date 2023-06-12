@@ -74,13 +74,13 @@
             "type": "shell",
             "group": "build",
             "command": "cmake",
-            "args": [
-                "-Bbuild/Release",
-                "-S.",
-                "-DCMAKE_BUILD_TYPE=Release",
-                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/Release/generators/conan_toolchain.cmake",
-            ],
             "linux": {
+                "args": [
+                    "-Bbuild/Release",
+                    "-S.",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/Release/generators/conan_toolchain.cmake",
+                ],
                 "options": {
                     "env": {
                         "CC": "/usr/bin/clang",
@@ -89,6 +89,12 @@
                 },
             },
             "windows": {
+                "args": [
+                    "-Bbuild/Release",
+                    "-S.",
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/generators/conan_toolchain.cmake",
+                ],
                 "options": {
                     "env": {
                         "VSLANG": "1033",
@@ -109,13 +115,13 @@
             "type": "shell",
             "group": "build",
             "command": "cmake",
-            "args": [
-                "-Bbuild/Debug",
-                "-S.",
-                "-DCMAKE_BUILD_TYPE=Debug",
-                "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/Debug/generators/conan_toolchain.cmake",
-            ],
             "linux": {
+                "args": [
+                    "-Bbuild/Debug",
+                    "-S.",
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/Debug/generators/conan_toolchain.cmake",
+                ],
                 "options": {
                     "env": {
                         "CC": "/usr/bin/clang",
@@ -124,6 +130,12 @@
                 },
             },
             "windows": {
+                "args": [
+                    "-Bbuild/Debug",
+                    "-S.",
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    "-DCMAKE_TOOLCHAIN_FILE=${workspaceFolder}/build/generators/conan_toolchain.cmake",
+                ],
                 "options": {
                     "env": {
                         "VSLANG": "1033",
