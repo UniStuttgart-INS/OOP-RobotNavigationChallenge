@@ -16,6 +16,12 @@
 #include "TEAMNAME/units/Headquarters.hpp"
 #include "TEAMNAME/player/Player.hpp"
 
+// #######################################################################################
+// #######################################################################################
+
+#define PLAYER_1 TEAMNAME
+#define PLAYER_2 TEAMNAME
+
 namespace oop::internal
 {
 
@@ -209,8 +215,13 @@ void GameState::OnStart()
         switch (p)
         {
         case 0:
+            players.push_back(std::make_shared<PLAYER_1::Player>(startPosition, ImPlot::GetColormapColor(5 - static_cast<int>(p), ImPlot::GetColormapIndex("Dark"))));
+            break;
+        case 1:
+            players.push_back(std::make_shared<PLAYER_2::Player>(startPosition, ImPlot::GetColormapColor(5 - static_cast<int>(p) - 4, ImPlot::GetColormapIndex("Dark"))));
+            break;
         default:
-            players.push_back(std::make_shared<TEAMNAME::Player>(startPosition, ImPlot::GetColormapColor(5 - static_cast<int>(p), ImPlot::GetColormapIndex("Dark"))));
+            players.push_back(std::make_shared<TEAMNAME::Player>(startPosition, ImPlot::GetColormapColor(5 - static_cast<int>(p) - 4, ImPlot::GetColormapIndex("Dark"))));
             break;
         }
 
@@ -223,6 +234,11 @@ void GameState::OnStart()
         switch (p)
         {
         case 0:
+            players.back()->AddUnit(std::make_shared<PLAYER_1::Headquarters>(players.back().get(), GetNextGID(), startPosition, hqHeading));
+            break;
+        case 1:
+            players.back()->AddUnit(std::make_shared<PLAYER_2::Headquarters>(players.back().get(), GetNextGID(), startPosition, hqHeading));
+            break;
         default:
             players.back()->AddUnit(std::make_shared<TEAMNAME::Headquarters>(players.back().get(), GetNextGID(), startPosition, hqHeading));
             break;
