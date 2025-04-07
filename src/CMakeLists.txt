@@ -17,8 +17,8 @@ add_executable(${PROJECT_NAME_LOWERCASE} ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME_LOWERCASE} PRIVATE project_options
                                                         project_warnings
                                                         application
-                                                        imgui
-                                                        implot
+                                                        imgui::imgui
+                                                        implot::implot
                                                         fmt::fmt
                                                         spdlog::spdlog
                                                         Eigen3::Eigen)

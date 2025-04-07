@@ -59,40 +59,14 @@ set_project_warnings(project_warnings) # set standard compiler warnings
 find_package(fmt REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(Eigen3 REQUIRED)
-
-# ---------------------------------------------- imgui ---------------------------------------------
-
-file(
-  GLOB _imgui_Sources
-  LIST_DIRECTORIES OFF
-  "${CMAKE_SOURCE_DIR}/lib/imgui/*.cpp" "${CMAKE_SOURCE_DIR}/lib/imgui/*.h"
-  "${CMAKE_SOURCE_DIR}/lib/imgui/misc/cpp/*.cpp" "${CMAKE_SOURCE_DIR}/lib/imgui/misc/cpp/*.h")
-add_library(imgui ${_imgui_Sources})
-include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/lib/imgui")
-include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/lib/imgui/misc/cpp")
-target_link_libraries(imgui PRIVATE project_options)
-target_compile_definitions(imgui PUBLIC "ImDrawIdx=unsigned int")
-set_target_properties(imgui PROPERTIES CXX_CLANG_TIDY "")
-set_target_properties(imgui PROPERTIES CXX_CPPCHECK "")
-
-# --------------------------------------------- implot ---------------------------------------------
-
-file(
-  GLOB _implot_Sources
-  LIST_DIRECTORIES OFF
-  "${CMAKE_SOURCE_DIR}/lib/implot/*.cpp" "${CMAKE_SOURCE_DIR}/lib/implot/*.h")
-add_library(implot ${_implot_Sources})
-include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/lib/implot")
-target_link_libraries(implot PRIVATE project_options)
-target_compile_definitions(implot PUBLIC "ImDrawIdx=unsigned int")
-set_target_properties(implot PROPERTIES CXX_CLANG_TIDY "")
-set_target_properties(implot PROPERTIES CXX_CPPCHECK "")
+find_package(imgui REQUIRED)
+find_package(implot REQUIRED)
 
 # ------------------------------------------- Application ------------------------------------------
 
 add_subdirectory(lib/application)
 include_directories(SYSTEM lib/application/include)
-target_link_libraries(application PRIVATE project_options imgui implot)
+target_link_libraries(application PRIVATE project_options imgui::imgui implot::implot)
 target_compile_definitions(application PUBLIC "_CONSOLE")
 set_target_properties(application PROPERTIES CXX_CLANG_TIDY "")
 set_target_properties(application PROPERTIES CXX_CPPCHECK "")
@@ -118,8 +92,8 @@ add_subdirectory(src)
 if(MSVC AND CMAKE_BUILD_TYPE STREQUAL "Release")
   set_target_properties(
     ${PROJECT_NAME_LOWERCASE}
-    imgui
-    implot
+    imgui::imgui
+    implot::implot
     application
     PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
 endif()

@@ -27,7 +27,7 @@ As Robots are technical machines, they have certain limitations:
 ##### Git
 - Command-line (Windows users need to install [Git](https://git-scm.com/download/win))
     ```
-    git clone --recurse-submodules https://github.com/UniStuttgart-INS/OOP-RobotNavigationChallenge.git
+    git clone https://github.com/UniStuttgart-INS/OOP-RobotNavigationChallenge.git
     ```
 - When downloading the Zip (instead of using command-line), make sure to manually download the libraries in the `lib` folder.
 

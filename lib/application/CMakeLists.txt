@@ -24,7 +24,7 @@ target_include_directories(application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/includ
 find_package(imgui REQUIRED)
 find_package(stb_image REQUIRED)
 find_package(ScopeGuard REQUIRED)
-target_link_libraries(application PUBLIC imgui)
+target_link_libraries(application PUBLIC imgui::imgui)
 target_link_libraries(application PRIVATE stb_image ScopeGuard)
 
 if (WIN32)
