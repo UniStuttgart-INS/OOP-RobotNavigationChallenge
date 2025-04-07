@@ -54,7 +54,7 @@ class PlayerBase
     [[nodiscard]] ImColor GetColor() const;
 
     /// @brief Get the currently available resources of the player
-    [[nodiscard]] const std::array<ResourceType, ResourceType_COUNT>& GetResources() const;
+    [[nodiscard]] const std::array<size_t, ResourceType_COUNT>& GetResources() const;
 
     /// @brief Get the Headquarter position
     [[nodiscard]] Eigen::Vector2f GetHeadquarterPosition() const;
@@ -102,12 +102,12 @@ class PlayerBase
     bool m_isAlive = true;
 
     /// Currently available resources
-    std::array<ResourceType, ResourceType_COUNT> m_resources{};
+    std::array<size_t, ResourceType_COUNT> m_resources{};
 
     /// Total collected resources
-    std::array<ResourceType, ResourceType_COUNT> m_collectedResourcesTotal{};
+    std::array<size_t, ResourceType_COUNT> m_collectedResourcesTotal{};
 
-    /// @brief Adds a unit to the list of game units the player posesses
+    /// @brief Adds a unit to the list of game units the player possesses
     /// @param[in] unit The unit to add
     void AddUnit(const std::shared_ptr<Unit>& unit);
 

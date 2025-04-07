@@ -93,10 +93,7 @@ float Virus::GetDrawSize() const
 void Virus::Update(float deltaTime)
 {
     m_currentHealth += glob::units::ATTR_VIRUS_HEALTH_REGENERATION * deltaTime;
-    if (m_currentHealth > m_maxHealth)
-    {
-        m_currentHealth = m_maxHealth;
-    }
+    m_currentHealth = std::min(m_currentHealth, m_maxHealth);
 
     Unit::Update(deltaTime);
 

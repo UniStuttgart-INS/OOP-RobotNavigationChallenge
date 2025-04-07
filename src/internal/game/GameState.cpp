@@ -249,7 +249,7 @@ void GameState::OnStart()
             std::swap(players.back()->m_units.front(), players.back()->m_units.back());
         }
 
-        for (ResourceType t = 0; t < ResourceType_COUNT; ++t)
+        for (uint8_t t = 0; t < ResourceType_COUNT; ++t)
         {
             // Calculate total available resources on the map
             availableResources.at(t) = RandomNumberGenerator::gameRngGenerator().uniform_real_distribution<float>(glob::resources::AMOUNT_RESOURCES_TOTAL.at(t).front(),
@@ -258,7 +258,10 @@ void GameState::OnStart()
             // Spawn resource in close proximity to headquaters
             auto amount = RandomNumberGenerator::gameRngGenerator().uniform_real_distribution<float>(glob::resources::AMOUNT_RESOURCES_PER_ENTITY.at(t).front(),
                                                                                                      glob::resources::AMOUNT_RESOURCES_PER_ENTITY.at(t).back());
-            resources.emplace_back(t, amount, GetNewResourcePosition(startPosition, glob::resources::MIN_DISTANCE_RESOURCE_TO_HQ_LIMITED), M_PI / 180 * 0.0F);
+            resources.emplace_back(static_cast<ResourceType>(t),
+                                   amount,
+                                   GetNewResourcePosition(startPosition, glob::resources::MIN_DISTANCE_RESOURCE_TO_HQ_LIMITED),
+                                   M_PI / 180 * 0.0F);
             availableResources.at(t) -= amount;
         }
     }
@@ -266,13 +269,13 @@ void GameState::OnStart()
     // Spawn resources till the total available amount is exhausted
     while (std::any_of(availableResources.begin(), availableResources.end(), [](float amount) { return amount > 0; }))
     {
-        for (ResourceType t = 0; t < ResourceType_COUNT; t++)
+        for (uint8_t t = 0; t < ResourceType_COUNT; t++)
         {
             if (availableResources.at(t) > 0)
             {
                 auto amount = RandomNumberGenerator::gameRngGenerator().uniform_real_distribution<float>(glob::resources::AMOUNT_RESOURCES_PER_ENTITY.at(t).front(),
                                                                                                          glob::resources::AMOUNT_RESOURCES_PER_ENTITY.at(t).back());
-                resources.emplace_back(t, amount, GetNewResourcePosition(), 0.0F);
+                resources.emplace_back(static_cast<ResourceType>(t), amount, GetNewResourcePosition(), 0.0F);
                 availableResources.at(t) -= amount;
             }
         }
@@ -410,7 +413,7 @@ void GameState::Update(float deltaTime)
                 for (size_t p = 1; p < players.size(); ++p)
                 {
                     size_t resSum = 0;
-                    for (ResourceType resType = 0; resType < ResourceType_COUNT; ++resType)
+                    for (uint8_t resType = 0; resType < ResourceType_COUNT; ++resType)
                     {
                         resSum += players.at(p)->m_collectedResourcesTotal.at(resType);
                     }
@@ -434,7 +437,7 @@ void GameState::Update(float deltaTime)
             if (size_t unitCnt = player->m_units.size() - 1; // Player has only one unit left (has to be HQ, otherwise already dead)
                 unitCnt == 0)
             {
-                for (ResourceType resType = 0; resType < ResourceType_COUNT; ++resType) // Not enough resources to build new unit
+                for (uint8_t resType = 0; resType < ResourceType_COUNT; ++resType) // Not enough resources to build new unit
                 {
                     if (player->m_resources.at(resType) < static_cast<size_t>(glob::units::ROBOT_COSTS.at(resType)))
                     {

@@ -35,7 +35,7 @@ ImColor PlayerBase::GetColor() const
     return m_color;
 }
 
-const std::array<ResourceType, ResourceType_COUNT>& PlayerBase::GetResources() const
+const std::array<size_t, ResourceType_COUNT>& PlayerBase::GetResources() const
 {
     return m_resources;
 }
@@ -58,17 +58,17 @@ void PlayerBase::SpawnUnit(const std::shared_ptr<Unit>& unit)
 {
     auto resCosts = unit->GetUnitCosts();
 
-    for (ResourceType resType = 0; resType < ResourceType_COUNT; ++resType)
+    for (uint8_t resType = 0; resType < ResourceType_COUNT; ++resType)
     {
         if (resCosts.at(resType) > m_resources.at(resType))
         {
-            spdlog::warn("Player {} can't spawn unit because not enough {}", m_gid, Resource::GetTypeName(resType));
+            spdlog::warn("Player {} can't spawn unit because not enough {}", m_gid, Resource::GetTypeName(static_cast<ResourceType>(resType)));
             return;
         }
     }
 
     // Spawing possible
-    for (ResourceType resType = 0; resType < ResourceType_COUNT; ++resType)
+    for (uint8_t resType = 0; resType < ResourceType_COUNT; ++resType)
     {
         m_resources.at(resType) -= resCosts.at(resType);
     }

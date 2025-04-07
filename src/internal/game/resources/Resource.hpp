@@ -5,14 +5,15 @@
 
 #pragma once
 
+#include <string_view>
 #include <Eigen/Core>
 #include <imgui.h>
+#include <fmt/format.h>
 
 namespace oop
 {
-using ResourceType = size_t;
 
-enum ResourceType_
+enum ResourceType : uint8_t
 {
     ResourceType_Capacitor,
     ResourceType_Coil,
@@ -75,4 +76,12 @@ class Resource
 };
 
 } // namespace internal
+
 } // namespace oop
+
+template<>
+struct fmt::formatter<oop::ResourceType> : fmt::formatter<std::string_view>
+{
+    auto format(oop::ResourceType type, format_context& ctx) const
+        -> format_context::iterator;
+};

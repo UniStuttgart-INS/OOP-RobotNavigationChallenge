@@ -12,3 +12,6 @@ CMakeUserPresets.json
 
 # ImGui
 ImGui.ini
+
+# Ignore Direnv
+.direnv

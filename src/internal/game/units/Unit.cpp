@@ -109,7 +109,7 @@ std::array<size_t, 3> Unit::GetUnitCosts() const
     std::array<float, 3> resourceCosts{};
     std::array<size_t, 3> resourceCostsBound{};
 
-    for (ResourceType resType = 0; resType < ResourceType_COUNT; ++resType)
+    for (uint8_t resType = 0; resType < ResourceType_COUNT; ++resType)
     {
         resourceCosts.at(resType) = static_cast<float>(glob::units::ROBOT_COSTS.at(resType));
 
@@ -401,9 +401,9 @@ void Unit::UpdateAlways()
                 measurement.at(rngSizeStart) = 'C';
                 measurement.at(rngSizeStart + 1) = '+';
                 measurement.at(rngSizeStart + 2) = '+';
-                *reinterpret_cast<float*>(&measurement.at(rngSizeStart + 3 + 0 * 4)) = satUnitDistance;
-                *reinterpret_cast<float*>(&measurement.at(rngSizeStart + 3 + 1 * 4)) = satellite.m_pos.x();
-                *reinterpret_cast<float*>(&measurement.at(rngSizeStart + 3 + 2 * 4)) = satellite.m_pos.y();
+                *reinterpret_cast<float*>(&measurement.at(rngSizeStart + 3 + 0UL * 4)) = satUnitDistance;
+                *reinterpret_cast<float*>(&measurement.at(rngSizeStart + 3 + 1UL * 4)) = satellite.m_pos.x();
+                *reinterpret_cast<float*>(&measurement.at(rngSizeStart + 3 + 2UL * 4)) = satellite.m_pos.y();
                 union
                 {
                     uint16_t value;
@@ -414,8 +414,8 @@ void Unit::UpdateAlways()
                 {
                     crc.value += RandomNumberGenerator::userRngGenerator().uniform_int_distribution<uint16_t>(1, std::numeric_limits<uint16_t>::max());
                 }
-                measurement.at(rngSizeStart + 3 + 3 * 4 + 0) = crc.data.at(1);
-                measurement.at(rngSizeStart + 3 + 3 * 4 + 1) = crc.data.at(0);
+                measurement.at(rngSizeStart + 3 + 3UL * 4 + 0) = crc.data.at(1);
+                measurement.at(rngSizeStart + 3 + 3UL * 4 + 1) = crc.data.at(0);
 
                 for (size_t i = rngSizeStart + msgSize; i < rngSizeStart + msgSize + rngSizeEnd; i++)
                 {
@@ -438,10 +438,7 @@ void Unit::Update(float deltaTime)
     if ((m_pos - m_parent->m_units.front()->m_pos).norm() <= glob::units::ATTR_HQ_HEAL_RANGE)
     {
         m_currentHealth += glob::units::ATTR_HQ_HEAL_AMOUNT * deltaTime;
-        if (m_currentHealth > m_maxHealth)
-        {
-            m_currentHealth = m_maxHealth;
-        }
+        m_currentHealth = std::min(m_currentHealth, m_maxHealth);
     }
 
     Think(deltaTime);

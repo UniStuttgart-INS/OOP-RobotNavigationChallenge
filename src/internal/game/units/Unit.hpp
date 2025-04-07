@@ -83,7 +83,7 @@ class Unit
     // ###########################################################################################################
 
     /// Possible Actions to perform every update cycle
-    enum Action
+    enum Action : uint8_t
     {
         Action_None,
         Action_Move,
@@ -249,7 +249,7 @@ class Unit
     Eigen::Vector2f m_lastAttackedUnitPosition;
 
     /// Type and amount of resources currently carrying
-    std::pair<ResourceType, size_t> m_resourcesCarried{};
+    std::pair<ResourceType, size_t> m_resourcesCarried;
 
     /// Clock offset which puts an error on the distance measurements
     double m_clockOffset = 0.0;

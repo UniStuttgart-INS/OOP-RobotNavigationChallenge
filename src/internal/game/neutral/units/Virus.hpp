@@ -66,7 +66,7 @@ class Virus : public Unit
     /// @brief Calculates the Heading to the target
     [[nodiscard]] float CalculateHeadingToTarget() const;
 
-    enum class State
+    enum class State : uint8_t
     {
         Idle,
         Exploring,

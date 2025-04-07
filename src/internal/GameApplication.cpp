@@ -1,5 +1,6 @@
 #include "GameApplication.hpp"
 
+#include <imgui.h>
 #include "gui/Renderer.hpp"
 #include "game/GameState.hpp"
 #include "game/Settings.hpp"

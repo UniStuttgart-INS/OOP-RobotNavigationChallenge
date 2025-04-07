@@ -29,6 +29,8 @@ std::string Resource::GetTypeName(ResourceType type)
         return "Resistor";
     case ResourceType_COUNT:
         return {};
+    default:
+        break;
     }
     return {};
 }
@@ -182,3 +184,25 @@ ImColor Resource::color(ResourceType type)
 }
 
 } // namespace oop::internal
+
+auto fmt::formatter<oop::ResourceType>::format(oop::ResourceType type, format_context& ctx) const
+    -> format_context::iterator
+{
+    std::string_view name = "unknown";
+    switch (type)
+    {
+    case oop::ResourceType_Capacitor:
+        name = "Capacitor";
+        break;
+    case oop::ResourceType_Coil:
+        name = "Coil";
+        break;
+    case oop::ResourceType_Resistor:
+        name = "Resistor";
+        break;
+    case oop::ResourceType_COUNT:
+        name = "COUNT";
+        break;
+    }
+    return formatter<string_view>::format(name, ctx);
+}
